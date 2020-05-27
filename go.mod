@@ -1,4 +1,4 @@
-module github.com/FlipsideCrypto/flip-client-go
+module github.com/FlipsideCrypto/flip-rpc-client-go
 
 go 1.12
 
