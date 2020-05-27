@@ -6,7 +6,7 @@ Go client for accessing Flip RPC Interface
 
 ### Initialization
 
-```go
+```golang
 config := Config{APIKey: "<api-key>" BaseURL: "<url-to-the-rpc>"}
 client, err := NewClient(config)
 ```
@@ -15,7 +15,7 @@ client, err := NewClient(config)
 
 Evaluate a condition and retrieve the members.
 
-```go
+```golang
 gte := Gte{
     PartitionID: "sorted_set:ad43bf8e-0f0c-4102-be91-52bc84150af2:current_balances:flipside",
     Value:       10000000,
