@@ -17,10 +17,10 @@ func makeCondition() Condition {
 	return c
 }
 
-func TestClient_GetConditionMembers(t *testing.T) {
+func TestClient_GetSegmentMembers(t *testing.T) {
 	client := getClient(t)
 
-	c, err := client.GetConditionMembers(makeCondition())
+	c, err := client.GetSegmentMembers(makeCondition())
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
@@ -28,18 +28,18 @@ func TestClient_GetConditionMembers(t *testing.T) {
 		t.Fatal("count is nil")
 	}
 
-	fmt.Fprintln(os.Stdout, "GetConditionMembers")
+	fmt.Fprintln(os.Stdout, "GetSegmentMembers")
 	fmt.Fprintln(os.Stdout, *c)
 	fmt.Println("")
 }
 
-func TestClient_IntersectMembersToCondition(t *testing.T) {
+func TestClient_IntersectMembersToSegment(t *testing.T) {
 	client := getClient(t)
 
 	intersectMembers := make([]string, 0)
 	intersectMembers = append(intersectMembers, "a090b025a1489aa6c9204d7b85ac77d51b814402d5cbdec27335575bb46e4f20")
 
-	c, err := client.IntersectMembersToCondition(intersectMembers, makeCondition())
+	c, err := client.IntersectMembersToSegment(intersectMembers, makeCondition())
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
@@ -47,7 +47,7 @@ func TestClient_IntersectMembersToCondition(t *testing.T) {
 		t.Fatal("count is nil")
 	}
 
-	fmt.Fprintln(os.Stdout, "IntersectMembersToCondition")
+	fmt.Fprintln(os.Stdout, "IntersectMembersToSegment")
 	fmt.Fprintln(os.Stdout, *c)
 	fmt.Println("")
 }
@@ -112,22 +112,22 @@ func TestClient_GetDatasets(t *testing.T) {
 // 	fmt.Println("")
 // }
 
-func TestClient_GetRefreshJob(t *testing.T) {
-	client := getClient(t)
-	jobID := "0f5f8149-03b7-4809-ae3b-0b319cf062c0"
+// func TestClient_GetRefreshJob(t *testing.T) {
+// 	client := getClient(t)
+// 	jobID := "0f5f8149-03b7-4809-ae3b-0b319cf062c0"
 
-	c, err := client.GetRefreshJob(jobID)
-	if err != nil {
-		t.Fatalf("Unexpected error: %v", err)
-	}
-	if c == nil {
-		t.Fatal("count is nil")
-	}
+// 	c, err := client.GetRefreshJob(jobID)
+// 	if err != nil {
+// 		t.Fatalf("Unexpected error: %v", err)
+// 	}
+// 	if c == nil {
+// 		t.Fatal("count is nil")
+// 	}
 
-	fmt.Fprintln(os.Stdout, "GetRefreshJob")
-	fmt.Fprintln(os.Stdout, *c)
-	fmt.Println("")
-}
+// 	fmt.Fprintln(os.Stdout, "GetRefreshJob")
+// 	fmt.Fprintln(os.Stdout, *c)
+// 	fmt.Println("")
+// }
 
 func getClient(t *testing.T) Client {
 	apiKey := os.Getenv("FLIP_API_KEY")

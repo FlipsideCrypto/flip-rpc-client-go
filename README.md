@@ -11,9 +11,9 @@ config := Config{APIKey: "<api-key>" BaseURL: "<url-to-the-rpc>"}
 client, err := NewClient(config)
 ```
 
-### Get Condition Members
+### Get Segment Members
 
-Evaluate a condition and retrieve the members.
+Evaluate a segment's conditions and retrieve its members.
 
 ```golang
 gte := Gte{
@@ -24,12 +24,12 @@ condition := Condition{
     Gte: gte,
 }
 
-result, err := client.GetConditionMembers(condition)
+result, err := client.GetSegmentMembers(condition)
 ```
 
-### Intersect Members to Condition
+### Intersect Members to Segment
 
-Identify the intersection of an array of members to evaluated conditions.
+Identify the intersection of an array of members to a segment's evaluated conditions.
 
 ```go
 intersectMembers := make([]string, 0)
@@ -43,7 +43,7 @@ condition := Condition{
     Gte: gte,
 }
 
-result, err := client.IntersectMembersToCondition(intersectMembers, condition)
+result, err := client.IntersectMembersToSegment(intersectMembers, condition)
 ```
 
 ### Get Member Partitions
@@ -107,4 +107,10 @@ Get the status of a refresh job.
 jobID := "0f5f8149-03b7-4809-ae3b-0b319cf062c0"
 
 result, err := client.GetRefreshJob(jobID)
+```
+
+## Test
+
+```bash
+go test
 ```
