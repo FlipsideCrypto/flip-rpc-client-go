@@ -16,11 +16,11 @@ client, err := NewClient(config)
 Evaluate a segment's conditions and retrieve its members.
 
 ```golang
-gte := Gte{
+gte := segment.Gte{
     PartitionID: "sorted_set:ad43bf8e-0f0c-4102-be91-52bc84150af2:current_balances:flipside",
     Value:       10000000,
 }
-condition := Condition{
+condition := segment.Condition{
     Gte: gte,
 }
 
@@ -35,11 +35,11 @@ Identify the intersection of an array of members to a segment's evaluated condit
 intersectMembers := make([]string, 0)
 intersectMembers = append(intersectMembers, "a090b025a1489aa6c9204d7b85ac77d51b814402d5cbdec27335575bb46e4f20")
 
-gte := Gte{
+gte := segment.Gte{
     PartitionID: "sorted_set:ad43bf8e-0f0c-4102-be91-52bc84150af2:current_balances:flipside",
     Value:       10000000,
 }
-condition := Condition{
+condition := segment.Condition{
     Gte: gte,
 }
 
@@ -55,6 +55,59 @@ entityID := "ad43bf8e-0f0c-4102-be91-52bc84150af2"
 memberID := "a0969f676e0274c34fffb4261b59d3de48de0d5845ed9780ac43045cf954ed81"
 
 result, err := client.GetMemberPartitions(entityID, memberID)
+```
+
+### ExecuteDynamicQuery
+
+Execute a query.
+
+```golang
+gte := segment.Gte{
+    PartitionID: "sorted_set:ad43bf8e-0f0c-4102-be91-52bc84150af2:current_balances:flipside",
+    Value:       10000000,
+}
+
+segments := make(map[string]segment.Condition)
+segments["large_balance_holder"] = segment.Condition{
+    Gte: gte,
+}
+
+aggregates := make([]dynamicquery.Aggregate, 0)
+aggregates = append(aggregates, dynamicquery.Aggregate{
+    Field:             "event_amount",
+    Label:             "total_amount",
+    DecimalAdjustment: 16,
+    Operation:         "sum",
+})
+
+groupBy := make([]dynamicquery.GroupBy, 0)
+groupBy = append(groupBy, dynamicquery.GroupBy{
+    Field:      "block_timestamp",
+    Timebucket: "1 day",
+    Label:      "metric_date",
+})
+
+inSegment := dynamicquery.InSegment{
+    Field: "event_to",
+    Value: "large_balance_holder",
+}
+filter := dynamicquery.Filter{
+    InSegment: inSegment,
+}
+
+query := dynamicquery.Query{
+    Table:      "udm_events_aion",
+    Schema:     "source",
+    Filter:     filter,
+    GroupBy:    groupBy,
+    Aggregates: aggregates,
+    Segments:   segments,
+}
+
+debug := false
+
+result, err := client.ExecuteDynamicQuery(query, debug)
+
 ```
 
 ### Get Datasets

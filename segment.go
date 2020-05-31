@@ -1,46 +1,10 @@
 package flip
 
 import (
+	"github.com/FlipsideCrypto/flip-rpc-client-go/segment"
 	"github.com/mitchellh/mapstructure"
 	"github.com/pkg/errors"
 )
-
-// Gte = greater than or equal to
-type Gte struct {
-	PartitionID string  `json:"partition_id"`
-	Value       float64 `json:"value"`
-}
-
-// Lte = less than or equal to
-type Lte struct {
-	PartitionID string  `json:"partition_id"`
-	Value       float64 `json:"value"`
-}
-
-// Lt = less than
-type Lt struct {
-	PartitionID string  `json:"partition_id"`
-	Value       float64 `json:"value"`
-}
-
-// Gt = greater than
-type Gt struct {
-	PartitionID string  `json:"partition_id"`
-	Value       float64 `json:"value"`
-}
-
-// Condition is set of logic
-type Condition struct {
-	PartitionID string  `json:"partition_id"`
-	Value       float64 `json:"value"`
-
-	Or  []*Condition `json:"or"`
-	And []*Condition `json:"and"`
-	Gt  Gt           `json:"gt"`
-	Gte Gte          `json:"gte"`
-	Lt  Lt           `json:"lt"`
-	Lte Lte          `json:"lte"`
-}
 
 // GetSegmentMembersResponse returns the RPC response
 type GetSegmentMembersResponse struct {
@@ -49,8 +13,8 @@ type GetSegmentMembersResponse struct {
 }
 
 // GetSegmentMembers returns the members belonging to the result set of a condition.
-func (c Client) GetSegmentMembers(condition Condition) (*GetSegmentMembersResponse, error) {
-	var input = make(map[string]Condition)
+func (c Client) GetSegmentMembers(condition segment.Condition) (*GetSegmentMembersResponse, error) {
+	var input = make(map[string]segment.Condition)
 	input["segment"] = condition
 
 	var segmentMembers GetSegmentMembersResponse
@@ -76,7 +40,7 @@ type IntersectMembersToSegmentResponse struct {
 }
 
 // IntersectMembersToSegment returns the intersection between a set of inputs against a segment formed by conditions
-func (c Client) IntersectMembersToSegment(members []string, condition Condition) (*IntersectMembersToSegmentResponse, error) {
+func (c Client) IntersectMembersToSegment(members []string, condition segment.Condition) (*IntersectMembersToSegmentResponse, error) {
 	var input = make(map[string]interface{})
 	input["segment"] = condition
 	input["members"] = members

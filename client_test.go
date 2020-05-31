@@ -4,17 +4,58 @@ import (
 	"fmt"
 	"os"
 	"testing"
+
+	"github.com/FlipsideCrypto/flip-rpc-client-go/dynamicquery"
+	"github.com/FlipsideCrypto/flip-rpc-client-go/segment"
 )
 
-func makeCondition() Condition {
-	gte := Gte{
+func makeCondition() segment.Condition {
+	gte := segment.Gte{
 		PartitionID: "sorted_set:ad43bf8e-0f0c-4102-be91-52bc84150af2:current_balances:flipside",
-		Value:       10000000,
+		Value:       100000000,
 	}
-	c := Condition{
+	c := segment.Condition{
 		Gte: gte,
 	}
 	return c
+}
+
+func makeQuery(condition segment.Condition) dynamicquery.Query {
+	segments := make(map[string]segment.Condition)
+	segments["large_balance_holder"] = condition
+
+	aggregates := make([]dynamicquery.Aggregate, 0)
+	aggregates = append(aggregates, dynamicquery.Aggregate{
+		Field:             "event_amount",
+		Label:             "total_amount",
+		DecimalAdjustment: 16,
+		Operation:         "sum",
+	})
+
+	groupBy := make([]dynamicquery.GroupBy, 0)
+	groupBy = append(groupBy, dynamicquery.GroupBy{
+		Field:      "block_timestamp",
+		Timebucket: "1 day",
+		Label:      "metric_date",
+	})
+
+	inSegment := dynamicquery.InSegment{
+		Field: "event_to",
+		Value: "large_balance_holder",
+	}
+	filter := dynamicquery.Filter{
+		InSegment: inSegment,
+	}
+
+	query := dynamicquery.Query{
+		Table:      "udm_events_aion",
+		Schema:     "source",
+		Filter:     filter,
+		GroupBy:    groupBy,
+		Aggregates: aggregates,
+		Segments:   segments,
+	}
+	return query
 }
 
 func TestClient_GetSegmentMembers(t *testing.T) {
@@ -48,6 +89,22 @@ func TestClient_IntersectMembersToSegment(t *testing.T) {
 	}
 
 	fmt.Fprintln(os.Stdout, "IntersectMembersToSegment")
+	fmt.Fprintln(os.Stdout, *c)
+	fmt.Println("")
+}
+
+func TestClient_ExecuteDynamicQuery(t *testing.T) {
+	client := getClient(t)
+
+	c, err := client.ExecuteDynamicQuery(makeQuery(makeCondition()), false)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+	if c == nil {
+		t.Fatal("count is nil")
+	}
+
+	fmt.Fprintln(os.Stdout, "ExecuteDynamicQuery")
 	fmt.Fprintln(os.Stdout, *c)
 	fmt.Println("")
 }
