@@ -11,6 +11,7 @@ type ExecuteDynamicQueryResponse struct {
 	Results     []interface{} `mapstructure:"results"`
 	ResultCount int           `mapstructure:"result_count"`
 	CompiledSQL string        `mapstructure:"compiled_sql"`
+	Error       string        `mapstructure:"error,omitempty"`
 }
 
 // ExecuteDynamicQuery returns the query results
@@ -21,15 +22,17 @@ func (c Client) ExecuteDynamicQuery(query dynamicquery.Query, debug bool) (*Exec
 
 	var response ExecuteDynamicQueryResponse
 
-	result, err := c.CallRPC("RPCService.ExecuteDynamicQuery", input)
+	rpc, err := c.CallRPC("RPCService.ExecuteDynamicQuery", input)
+
 	if err != nil {
 		return &response, err
 	}
 
-	err = mapstructure.Decode(result, &response)
+	err = mapstructure.Decode(rpc.Result, &response)
 	if err != nil {
 		return &response, errors.Wrap(err, "error decoding into `ExecuteDynamicQueryResponse`")
 	}
+	response.Error = rpc.Error
 
 	return &response, nil
 }

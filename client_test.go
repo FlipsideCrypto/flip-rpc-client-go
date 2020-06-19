@@ -96,16 +96,37 @@ func TestClient_IntersectMembersToSegment(t *testing.T) {
 func TestClient_ExecuteDynamicQuery(t *testing.T) {
 	client := getClient(t)
 
-	c, err := client.ExecuteDynamicQuery(makeQuery(makeCondition()), false)
+	resp, err := client.ExecuteDynamicQuery(makeQuery(makeCondition()), false)
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
-	if c == nil {
-		t.Fatal("count is nil")
+	if resp == nil {
+		t.Fatal("resp is nil")
 	}
 
 	fmt.Fprintln(os.Stdout, "ExecuteDynamicQuery")
-	fmt.Fprintln(os.Stdout, *c)
+	fmt.Fprintln(os.Stdout, *resp)
+	fmt.Println("")
+}
+
+func TestClient_ExecuteDynamicQueryWithError(t *testing.T) {
+	client := getClient(t)
+	query := makeQuery(makeCondition())
+	query.Table = "foobar"
+	resp, err := client.ExecuteDynamicQuery(query, false)
+
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+	if resp == nil {
+		t.Fatal("resp is nil")
+	}
+	if resp.Error == "" {
+		t.Fatal("error should not be nil")
+	}
+
+	fmt.Fprintln(os.Stdout, "ExecuteDynamicQuery")
+	fmt.Fprintln(os.Stdout, *resp)
 	fmt.Println("")
 }
 
