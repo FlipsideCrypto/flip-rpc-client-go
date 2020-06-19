@@ -19,12 +19,12 @@ func (c Client) GetSegmentMembers(condition segment.Condition) (*GetSegmentMembe
 
 	var segmentMembers GetSegmentMembersResponse
 
-	result, err := c.CallRPC("RPCService.GetSegmentMembers", input)
+	rpc, err := c.CallRPC("RPCService.GetSegmentMembers", input)
 	if err != nil {
 		return &segmentMembers, err
 	}
 
-	err = mapstructure.Decode(result, &segmentMembers)
+	err = mapstructure.Decode(rpc.Result, &segmentMembers)
 	if err != nil {
 		return &segmentMembers, errors.Wrap(err, "error decoding into `GetSegmentMembersResponse`")
 	}
@@ -47,12 +47,12 @@ func (c Client) IntersectMembersToSegment(members []string, condition segment.Co
 
 	var intersectResponse IntersectMembersToSegmentResponse
 
-	result, err := c.CallRPC("RPCService.IntersectMembersToSegment", input)
+	rpc, err := c.CallRPC("RPCService.IntersectMembersToSegment", input)
 	if err != nil {
 		return &intersectResponse, err
 	}
 
-	err = mapstructure.Decode(result, &intersectResponse)
+	err = mapstructure.Decode(rpc.Result, &intersectResponse)
 	if err != nil {
 		return &intersectResponse, errors.Wrap(err, "error decoding into `IntersectMembersToSegmentResponse`")
 	}

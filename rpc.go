@@ -25,7 +25,7 @@ type RPCResponse struct {
 }
 
 // CallRPC returns a response from the RPC interface
-func (c Client) CallRPC(method string, param interface{}) (interface{}, error) {
+func (c Client) CallRPC(method string, param interface{}) (*RPCResponse, error) {
 	params := make([]interface{}, 0)
 	params = append(params, param)
 
@@ -62,5 +62,5 @@ func (c Client) CallRPC(method string, param interface{}) (interface{}, error) {
 		return nil, errors.New(fmt.Sprintf("flip rpc responded with non-200 for %s, err: %s", c.RPCURL, rpcResponse.Error))
 	}
 
-	return rpcResponse.Result, nil
+	return &rpcResponse, nil
 }

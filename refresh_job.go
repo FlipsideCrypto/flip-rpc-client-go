@@ -7,11 +7,11 @@ import (
 
 // RefreshArgs are used as filters to determine what to refresh
 type RefreshArgs struct {
-	EntityID  string   `mapstructure:"entity_id",json:"entity_id"`
-	MetricID  string   `mapstructure:"metric_id",json:"metric_id"`
-	DatasetID string   `mapstructure:"dataset_id",json:"dataset_id"`
-	Tags      []string `mapstructure:"tags",json:"tags"`
-	Stage     string   `mapstructure:"stage",json:"stage"`
+	EntityID  string   `mapstructure:"entity_id" json:"entity_id"`
+	MetricID  string   `mapstructure:"metric_id" json:"metric_id"`
+	DatasetID string   `mapstructure:"dataset_id" json:"dataset_id"`
+	Tags      []string `mapstructure:"tags" json:"tags"`
+	Stage     string   `mapstructure:"stage" json:"stage"`
 }
 
 // RefreshResponse returns the RPC response
@@ -43,12 +43,12 @@ func (c Client) Refresh(refreshArgs RefreshArgs) (*RefreshResponse, error) {
 
 	var response RefreshResponse
 
-	result, err := c.CallRPC("RPCService.Refresh", input)
+	rpc, err := c.CallRPC("RPCService.Refresh", input)
 	if err != nil {
 		return &response, err
 	}
 
-	err = mapstructure.Decode(result, &response)
+	err = mapstructure.Decode(rpc.Result, &response)
 	if err != nil {
 		return &response, errors.Wrap(err, "error decoding into `RefreshResponse`")
 	}
@@ -63,12 +63,12 @@ func (c Client) GetRefreshJob(jobID string) (*RefreshResponse, error) {
 
 	var response RefreshResponse
 
-	result, err := c.CallRPC("RPCService.GetRefreshJob", input)
+	rpc, err := c.CallRPC("RPCService.GetRefreshJob", input)
 	if err != nil {
 		return &response, err
 	}
 
-	err = mapstructure.Decode(result, &response)
+	err = mapstructure.Decode(rpc.Result, &response)
 	if err != nil {
 		return &response, errors.Wrap(err, "error decoding into `GetRefreshJob`")
 	}
