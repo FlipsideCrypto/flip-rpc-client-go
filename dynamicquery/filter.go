@@ -9,9 +9,23 @@ type Filter struct {
 	Gte          Gte          `json:"gte"`
 	Lte          Lte          `json:"lte"`
 	Gt           Gt           `json:"gt"`
+	Eq           Eq           `json:"eq"`
+	NotEq        NotEq        `json:"not_eq"`
 	Lt           Lt           `json:"lt"`
 	And          []*Filter    `json:"and"`
 	Or           []*Filter    `json:"or"`
+}
+
+// Eq equal to filter
+type Eq struct {
+	Field string      `json:"field"`
+	Value interface{} `json:"value"`
+}
+
+// NotEq not equal to filter
+type NotEq struct {
+	Field string      `json:"field"`
+	Value interface{} `json:"value"`
 }
 
 // Gte greater than or equal to filter
