@@ -11,7 +11,7 @@ type ExecuteDynamicQueryResponse struct {
 	Results     []interface{} `mapstructure:"results" json:"results"`
 	ResultCount int           `mapstructure:"result_count" json:"result_count"`
 	CompiledSQL string        `mapstructure:"compiled_sql" json:"compiled_sql,omitempty"`
-	Error       string        `mapstructure:"error,omitempty" json:"error"`
+	Error       string        `mapstructure:"error,omitempty" json:"error,omitempty"`
 }
 
 // ExecuteDynamicQuery returns the query results
