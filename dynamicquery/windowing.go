@@ -11,6 +11,7 @@ type Latest struct {
 	PartitionBy []string      `json:"partition_by"`
 	OrderBy     string        `json:"order_by"`
 	Fields      []WindowField `json:"fields"`
+	Filter      *Filter       `json:"filter,omitempty"`
 }
 
 // Earliest builds a window operation over the earliest data from a partition
@@ -18,4 +19,5 @@ type Earliest struct {
 	PartitionBy []string      `json:"partition_by"`
 	OrderBy     string        `json:"order_by"`
 	Fields      []WindowField `json:"fields"`
+	Filter      *Filter       `json:"filter,omitempty"`
 }
