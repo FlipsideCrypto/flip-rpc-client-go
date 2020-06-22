@@ -8,10 +8,10 @@ type Query struct {
 	Schema     string                       `json:"schema"`
 	Aggregates []Aggregate                  `json:"aggregates"`
 	GroupBy    []GroupBy                    `json:"group_by"`
-	Filter     Filter                       `json:"filter"`
+	Filter     *Filter                      `json:"filter,omitempty"`
 	OrderBy    []OrderBy                    `json:"order_by"`
 	Limit      int                          `json:"limit"`
-	Latest     Latest                       `json:"latest"`
-	Earliest   Earliest                     `json:"earliest"`
+	Latest     *Latest                      `json:"latest,omitempty"`
+	Earliest   *Earliest                    `json:"earliest,omitempty"`
 	Segments   map[string]segment.Condition `json:"segments"`
 }
