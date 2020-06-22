@@ -50,10 +50,47 @@ func makeQuery(condition segment.Condition) dynamicquery.Query {
 	query := dynamicquery.Query{
 		Table:      "udm_events_aion",
 		Schema:     "source",
-		Filter:     filter,
+		Filter:     &filter,
 		GroupBy:    groupBy,
 		Aggregates: aggregates,
 		Segments:   segments,
+	}
+	return query
+}
+
+func makeWindowingQuery() dynamicquery.Query {
+
+	aggregates := make([]dynamicquery.Aggregate, 0)
+	aggregates = append(aggregates, dynamicquery.Aggregate{
+		Field:     "price",
+		Label:     "current_price",
+		Operation: "avg",
+	})
+
+	groupBy := make([]dynamicquery.GroupBy, 0)
+	groupBy = append(groupBy, dynamicquery.GroupBy{
+		Field: "market_id",
+		Label: "market_id",
+	})
+
+	orderBy := make([]dynamicquery.OrderBy, 0)
+	orderBy = append(orderBy, dynamicquery.OrderBy{
+		Label:     "market_id",
+		Direction: "DESC",
+	})
+
+	latest := dynamicquery.Latest{
+		PartitionBy: []string{"project_id", "oracle_id", "market_id"},
+		OrderBy:     "block_timestamp",
+	}
+
+	query := dynamicquery.Query{
+		Table:      "udm_price_feeds",
+		Schema:     "source",
+		GroupBy:    groupBy,
+		Aggregates: aggregates,
+		OrderBy:    orderBy,
+		Latest:     &latest,
 	}
 	return query
 }
@@ -105,6 +142,26 @@ func TestClient_ExecuteDynamicQuery(t *testing.T) {
 	}
 
 	fmt.Fprintln(os.Stdout, "ExecuteDynamicQuery")
+	fmt.Fprintln(os.Stdout, *resp)
+	fmt.Println("")
+}
+
+func TestClient_ExecuteDynamicQueryWithWindowing(t *testing.T) {
+	client := getClient(t)
+
+	resp, err := client.ExecuteDynamicQuery(makeWindowingQuery(), false)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+	if resp == nil {
+		t.Fatal("resp is nil")
+	}
+
+	if resp.Error != "" {
+		t.Fatalf("error is not empty %s", resp.Error)
+	}
+
+	fmt.Fprintln(os.Stdout, "ExecuteDynamicQueryWithWindowing")
 	fmt.Fprintln(os.Stdout, *resp)
 	fmt.Println("")
 }
