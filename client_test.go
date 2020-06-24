@@ -95,6 +95,23 @@ func makeWindowingQuery() dynamicquery.Query {
 	return query
 }
 
+func makeFieldsQuery() dynamicquery.Query {
+
+	fields := make([]dynamicquery.Field, 0)
+	fields = append(fields, dynamicquery.Field{
+		Label: "tx_id",
+		Field: "tx_id",
+	})
+
+	query := dynamicquery.Query{
+		Table:  "udm_events_aion",
+		Schema: "source",
+		Fields: &fields,
+		Limit:  5,
+	}
+	return query
+}
+
 func TestClient_GetSegmentMembers(t *testing.T) {
 	client := getClient(t)
 
@@ -162,6 +179,26 @@ func TestClient_ExecuteDynamicQueryWithWindowing(t *testing.T) {
 	}
 
 	fmt.Fprintln(os.Stdout, "ExecuteDynamicQueryWithWindowing")
+	fmt.Fprintln(os.Stdout, *resp)
+	fmt.Println("")
+}
+
+func TestClient_ExecuteDynamicQueryWithFields(t *testing.T) {
+	client := getClient(t)
+
+	resp, err := client.ExecuteDynamicQuery(makeFieldsQuery(), false, 10)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+	if resp == nil {
+		t.Fatal("resp is nil")
+	}
+
+	if resp.Error != "" {
+		t.Fatalf("error is not empty %s", resp.Error)
+	}
+
+	fmt.Fprintln(os.Stdout, "TestClient_ExecuteDynamicQueryWithFields")
 	fmt.Fprintln(os.Stdout, *resp)
 	fmt.Println("")
 }

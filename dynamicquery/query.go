@@ -11,6 +11,7 @@ type Query struct {
 	Filter     *Filter                      `json:"filter,omitempty"`
 	OrderBy    []OrderBy                    `json:"order_by"`
 	Limit      int                          `json:"limit"`
+	Fields     *[]Field                     `json:"fields,omitempty"`
 	Latest     *Latest                      `json:"latest,omitempty"`
 	Earliest   *Earliest                    `json:"earliest,omitempty"`
 	Segments   map[string]segment.Condition `json:"segments"`
