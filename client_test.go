@@ -133,7 +133,7 @@ func TestClient_IntersectMembersToSegment(t *testing.T) {
 func TestClient_ExecuteDynamicQuery(t *testing.T) {
 	client := getClient(t)
 
-	resp, err := client.ExecuteDynamicQuery(makeQuery(makeCondition()), false)
+	resp, err := client.ExecuteDynamicQuery(makeQuery(makeCondition()), false, 10)
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
@@ -149,7 +149,7 @@ func TestClient_ExecuteDynamicQuery(t *testing.T) {
 func TestClient_ExecuteDynamicQueryWithWindowing(t *testing.T) {
 	client := getClient(t)
 
-	resp, err := client.ExecuteDynamicQuery(makeWindowingQuery(), false)
+	resp, err := client.ExecuteDynamicQuery(makeWindowingQuery(), false, 10)
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
@@ -170,7 +170,7 @@ func TestClient_ExecuteDynamicQueryWithError(t *testing.T) {
 	client := getClient(t)
 	query := makeQuery(makeCondition())
 	query.Table = "foobar"
-	resp, err := client.ExecuteDynamicQuery(query, false)
+	resp, err := client.ExecuteDynamicQuery(query, false, 10)
 
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)

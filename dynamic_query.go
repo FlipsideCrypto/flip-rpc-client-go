@@ -11,14 +11,18 @@ type ExecuteDynamicQueryResponse struct {
 	Results     []interface{} `mapstructure:"results" json:"results"`
 	ResultCount int           `mapstructure:"result_count" json:"result_count"`
 	CompiledSQL string        `mapstructure:"compiled_sql" json:"compiled_sql,omitempty"`
+	TTLHash     string        `mapstructure:"ttl_hash" json:"ttl_hash,omitempty"`
+	TTLStart    string        `mapstructure:"ttl_start" json:"ttl_start,omitempty"`
+	TTLExpiry   string        `mapstructure:"ttl_expiry" json:"ttl_expiry,omitempty"`
 	Error       string        `mapstructure:"error,omitempty" json:"error,omitempty"`
 }
 
 // ExecuteDynamicQuery returns the query results
-func (c Client) ExecuteDynamicQuery(query dynamicquery.Query, debug bool) (*ExecuteDynamicQueryResponse, error) {
+func (c Client) ExecuteDynamicQuery(query dynamicquery.Query, debug bool, ttlSeconds int) (*ExecuteDynamicQueryResponse, error) {
 	var input = make(map[string]interface{})
 	input["query"] = query
 	input["debug"] = debug
+	input["ttl_seconds"] = ttlSeconds
 
 	var response ExecuteDynamicQueryResponse
 
