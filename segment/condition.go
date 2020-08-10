@@ -26,12 +26,12 @@ type Gt struct {
 
 // Condition is set of logic
 type Condition struct {
-	PartitionID string       `json:"partition_id"`
-	Value       float64      `json:"value"`
-	Or          []*Condition `json:"or"`
-	And         []*Condition `json:"and"`
-	Gt          Gt           `json:"gt"`
-	Gte         Gte          `json:"gte"`
-	Lt          Lt           `json:"lt"`
-	Lte         Lte          `json:"lte"`
+	PartitionID string       `json:"partition_id,omitempty"`
+	Value       float64      `json:"value,omitempty"`
+	Or          []*Condition `json:"or,omitempty"`
+	And         []*Condition `json:"and,omitempty"`
+	Gt          Gt           `json:"gt,omitempty"`
+	Gte         Gte          `json:"gte,omitempty"`
+	Lt          Lt           `json:"lt,omitempty"`
+	Lte         Lte          `json:"lte,omitempty"`
 }

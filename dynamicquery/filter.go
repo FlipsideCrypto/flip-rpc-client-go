@@ -2,18 +2,18 @@ package dynamicquery
 
 // Filter --
 type Filter struct {
-	In           In           `json:"in"`
-	NotIn        NotIn        `json:"not_in"`
-	InSegment    InSegment    `json:"in_segment"`
-	NotInSegment NotInSegment `json:"not_in_segment"`
-	Gte          Gte          `json:"gte"`
-	Lte          Lte          `json:"lte"`
-	Gt           Gt           `json:"gt"`
-	Eq           Eq           `json:"eq"`
-	NotEq        NotEq        `json:"not_eq"`
-	Lt           Lt           `json:"lt"`
-	And          []*Filter    `json:"and"`
-	Or           []*Filter    `json:"or"`
+	In           In           `json:"in,omitempty"`
+	NotIn        NotIn        `json:"not_in,omitempty"`
+	InSegment    InSegment    `json:"in_segment,omitempty"`
+	NotInSegment NotInSegment `json:"not_in_segment,omitempty"`
+	Gte          Gte          `json:"gte,omitempty"`
+	Lte          Lte          `json:"lte,omitempty"`
+	Gt           Gt           `json:"gt,omitempty"`
+	Eq           Eq           `json:"eq,omitempty"`
+	NotEq        NotEq        `json:"not_eq,omitempty"`
+	Lt           Lt           `json:"lt,omitempty"`
+	And          []*Filter    `json:"and,omitempty"`
+	Or           []*Filter    `json:"or,omitempty"`
 }
 
 // Eq equal to filter
