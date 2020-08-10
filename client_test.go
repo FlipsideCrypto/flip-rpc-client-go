@@ -15,7 +15,7 @@ func makeCondition() segment.Condition {
 		Value:       100000000,
 	}
 	c := segment.Condition{
-		Gte: gte,
+		Gte: &gte,
 	}
 	return c
 }
@@ -44,7 +44,7 @@ func makeQuery(condition segment.Condition) dynamicquery.Query {
 		Value: "large_balance_holder",
 	}
 	filter := dynamicquery.Filter{
-		InSegment: inSegment,
+		InSegment: &inSegment,
 	}
 
 	query := dynamicquery.Query{
