@@ -9,4 +9,5 @@ type GroupBy struct {
 	StartDate  string    `json:"start_date"`
 	EndDate    string    `json:"end_date"`
 	Datasets   []Dataset `json:"datasets"`
+	Segments   []string  `json:"segments"`
 }

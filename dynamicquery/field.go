@@ -7,4 +7,5 @@ type Field struct {
 	DecimalAdjustment int       `json:"decimal_adjustment"`
 	ToNegative        bool      `json:"to_negative"`
 	Datasets          []Dataset `json:"datasets"`
+	Segments          []string  `json:"segments"`
 }
